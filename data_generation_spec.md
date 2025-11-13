@@ -112,6 +112,8 @@
 - Acute: Upper respiratory infections, urinary tract infections, gastroenteritis
 - Chronic: Various cancers, autoimmune diseases, neurological conditions
 
+**Implemented catalog:** `config/reference_data/conditions.csv` currently enumerates 60 ICD-10-coded conditions spanning cardiovascular, metabolic, respiratory, mental health, musculoskeletal, renal, endocrine, neurologic, gastrointestinal, infectious, dermatologic, oncologic, autoimmune, and acute presentations. Condition IDs 1-60 map 1:1 to the CSV and to `condition_prevalence.conditions`.
+
 **Generation Rules:**
 - IDs: Sequential starting from 1
 - Names: Unique medical terms
@@ -1045,7 +1047,7 @@ Females: r = 0.58
 Smoker          1.00    0.30     -0.15    -0.10    0.08      -0.05
 Drinker         0.30    1.00     -0.10    -0.15    0.05      -0.03
 Exercise       -0.15   -0.10      1.00     0.25   -0.08       0.12
-Sleep          -0.10   -0.15      0.25     1.00   -0.15       0.05
+                Sleep          -0.10   -0.15      0.25     1.00   -0.15       0.05
 Housing Ins.    0.08    0.05     -0.08    -0.15    1.00      -0.50
 Employment     -0.05   -0.03      0.12     0.05   -0.50       1.00
 ```
@@ -1055,6 +1057,13 @@ Employment     -0.05   -0.03      0.12     0.05   -0.50       1.00
 # Use multivariate normal on latent variables, then threshold for binary
 # Or use copula methods for mixed continuous/binary
 ```
+
+**Current implementation:** `generators/members.py` samples a Gaussian copula using the `lifestyle_correlation` matrix from `config/distributions.yaml`. Latent normals are transformed to:
+- Bernoulli variables for smoker, drinker, housing insecurity, and employment (age-specific thresholds)
+- Log-normal minutes for exercise (matching median + `std_log`)
+- Truncated normal hours for sleep
+
+This guarantees the target Pearson correlations (±0.03 tolerance) while preserving the existing age-stratified marginal rates from §4.
 
 ### 8.3 Condition Clustering
 
@@ -1249,6 +1258,21 @@ assert avg_conditions > 3, "High utilizers don't have enough conditions"
 
 **Format:** Markdown or HTML report
 
+### 9.7 Validation CLI
+
+Use `validate_output.py` after generation to exercise the structural checks (§9.1, §9.4-9.6) and statistical suite (§§9.2-9.5):
+
+```bash
+# Structural/business validation
+python validate_output.py --data-dir synthetic_data
+
+# Structural + statistical validation (KS, chi-square, correlation, prevalence)
+python validate_output.py --stats --config config/config.yaml \
+    --data-dir synthetic_data --stats-sample-size 250000
+```
+
+The statistical validator samples up to `--stats-sample-size` members (default 200K) for scalability and prints a PASS/FAIL report for each test described above.
+
 ---
 
 ## 10. Configuration Parameters
@@ -1260,7 +1284,7 @@ n_members: 1000000           # Total members to generate
 n_insurers: 8                # Number of insurance companies
 n_plans_per_insurer: 5       # Plans per company (avg)
 n_facilities: 2000           # Medical facilities
-n_conditions: 75             # Number of conditions in database
+n_conditions: 60             # Number of conditions in database (see conditions.csv)
 ```
 
 ### 10.2 Temporal Parameters
