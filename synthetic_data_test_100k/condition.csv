@@ -1,0 +1,51 @@
+Condition_ID,Condition_name
+1,Hypertension
+2,Diabetes Type 2
+3,Hyperlipidemia
+4,Coronary Artery Disease
+5,Heart Failure
+6,Atrial Fibrillation
+7,Stroke
+8,Peripheral Artery Disease
+9,Asthma
+10,COPD
+11,Pneumonia
+12,Sleep Apnea
+13,Depression
+14,Anxiety
+15,Bipolar Disorder
+16,Schizophrenia
+17,PTSD
+18,Obesity
+19,Osteoarthritis
+20,Rheumatoid Arthritis
+21,Osteoporosis
+22,Back Pain
+23,Chronic Kidney Disease
+24,End Stage Renal Disease
+25,Urinary Tract Infection
+26,Benign Prostatic Hyperplasia
+27,Hypothyroidism
+28,Hyperthyroidism
+29,Diabetes Type 1
+30,Anemia
+31,Breast Cancer
+32,Lung Cancer
+33,Colon Cancer
+34,Prostate Cancer
+35,Skin Cancer
+36,Alzheimer Disease
+37,Parkinson Disease
+38,Multiple Sclerosis
+39,Epilepsy
+40,Migraine
+41,Gastroesophageal Reflux
+42,Irritable Bowel Syndrome
+43,Inflammatory Bowel Disease
+44,Cirrhosis
+45,Hepatitis C
+46,HIV
+47,Tuberculosis
+48,Sepsis
+49,Cellulitis
+50,Psoriasis

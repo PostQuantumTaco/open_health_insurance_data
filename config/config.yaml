@@ -1,0 +1,68 @@
+# Synthetic Health Insurance Data Generator - Configuration File
+# This file controls runtime parameters for data generation
+
+# ============================================================================
+# SCALE PARAMETERS
+# ============================================================================
+n_members: 5000000          # Number of members to generate (production scale test - optimized)
+batch_size: 25000           # Process members in batches for memory efficiency
+
+# Derived counts (automatically calculated, but shown for reference)
+# - Facilities: ~200 (0.2% of members)
+# - Insurers: 8
+# - Plans: 40 (4-6 per insurer)
+# - Conditions: 50
+# - Enrollments: ~90K (90% of members)
+# - Member_Conditions: ~150K (avg 1.5 per member)
+# - Claims: ~400K (avg 4 per member for 1 year)
+
+# ============================================================================
+# TEMPORAL PARAMETERS
+# ============================================================================
+reference_date: '2025-11-13'      # Current date for age calculations
+claims_lookback_years: 1          # Generate claims for past 1 year (MVP)
+enrollment_lookback_years: 2      # Generate enrollment history for 2 years
+
+# ============================================================================
+# RANDOMIZATION
+# ============================================================================
+random_seed: 42                   # Fixed seed for reproducibility (null for random)
+
+# ============================================================================
+# DATA QUALITY
+# ============================================================================
+# Null rates for optional fields (percentage as decimal)
+null_rates:
+  primary_care_physician: 0.30    # 30% don't have assigned PCP
+  heart_rate: 0.10                # 10% missing vitals
+  blood_pressure: 0.10
+  blood_oxygen: 0.15
+  housing_insecurity: 0.05        # 5% missing SDOH data
+  employment_status: 0.05
+
+# ============================================================================
+# OUTPUT CONFIGURATION
+# ============================================================================
+output_dir: 'synthetic_data'      # Directory for generated CSV files
+csv_encoding: 'utf-8'             # Character encoding for CSV files
+csv_date_format: '%Y-%m-%d'       # Date format in output files
+
+# ============================================================================
+# PERFORMANCE
+# ============================================================================
+enable_progress_bars: true        # Show tqdm progress bars
+show_time_estimates: true         # Display ETA calculations
+verbose_logging: true             # Print detailed generation steps
+
+# Parallel processing (for 1M+ member generation)
+enable_parallel: true             # Enable multiprocessing for large-scale generation
+n_workers: null                   # Number of parallel workers (null = auto-detect CPU count - 1)
+chunk_size: 100000                # Size of chunks for parallel processing (members per chunk)
+
+# ============================================================================
+# PATHS TO REFERENCE DATA
+# ============================================================================
+reference_data_dir: 'config/reference_data'
+state_populations_file: 'state_populations.csv'
+conditions_file: 'conditions.csv'
+distributions_file: 'distributions.yaml'

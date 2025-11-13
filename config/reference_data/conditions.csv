@@ -1,0 +1,61 @@
+condition_id,condition_name,icd10_code,category
+1,Hypertension,I10,Cardiovascular
+2,Diabetes Type 2,E11,Metabolic
+3,Hyperlipidemia,E78.5,Metabolic
+4,Coronary Artery Disease,I25.10,Cardiovascular
+5,Heart Failure,I50.9,Cardiovascular
+6,Atrial Fibrillation,I48.91,Cardiovascular
+7,Stroke,I63.9,Cardiovascular
+8,Peripheral Artery Disease,I73.9,Cardiovascular
+9,Asthma,J45.909,Respiratory
+10,COPD,J44.9,Respiratory
+11,Pneumonia,J18.9,Respiratory
+12,Sleep Apnea,G47.33,Respiratory
+13,Depression,F32.9,Mental Health
+14,Anxiety,F41.9,Mental Health
+15,Bipolar Disorder,F31.9,Mental Health
+16,Schizophrenia,F20.9,Mental Health
+17,PTSD,F43.10,Mental Health
+18,Obesity,E66.9,Metabolic
+19,Osteoarthritis,M19.90,Musculoskeletal
+20,Rheumatoid Arthritis,M06.9,Musculoskeletal
+21,Osteoporosis,M81.0,Musculoskeletal
+22,Back Pain,M54.5,Musculoskeletal
+23,Chronic Kidney Disease,N18.9,Renal
+24,End Stage Renal Disease,N18.6,Renal
+25,Urinary Tract Infection,N39.0,Renal
+26,Benign Prostatic Hyperplasia,N40.0,Renal
+27,Hypothyroidism,E03.9,Endocrine
+28,Hyperthyroidism,E05.90,Endocrine
+29,Diabetes Type 1,E10,Metabolic
+30,Anemia,D64.9,Hematologic
+31,Breast Cancer,C50.919,Oncologic
+32,Lung Cancer,C34.90,Oncologic
+33,Colon Cancer,C18.9,Oncologic
+34,Prostate Cancer,C61,Oncologic
+35,Skin Cancer,C44.90,Oncologic
+36,Alzheimer Disease,G30.9,Neurologic
+37,Parkinson Disease,G20,Neurologic
+38,Multiple Sclerosis,G35,Neurologic
+39,Epilepsy,G40.909,Neurologic
+40,Migraine,G43.909,Neurologic
+41,Gastroesophageal Reflux,K21.9,Gastrointestinal
+42,Irritable Bowel Syndrome,K58.9,Gastrointestinal
+43,Inflammatory Bowel Disease,K50.90,Gastrointestinal
+44,Cirrhosis,K74.60,Gastrointestinal
+45,Hepatitis C,B18.2,Infectious
+46,HIV,B20,Infectious
+47,Tuberculosis,A15.9,Infectious
+48,Sepsis,A41.9,Infectious
+49,Cellulitis,L03.90,Dermatologic
+50,Psoriasis,L40.9,Dermatologic
+51,Upper Respiratory Infection,J06.9,Infectious
+52,Gastroenteritis,A09,Gastrointestinal
+53,Leukemia,C91.90,Oncologic
+54,Lymphoma,C85.90,Oncologic
+55,Pancreatic Cancer,C25.9,Oncologic
+56,Ovarian Cancer,C56.9,Oncologic
+57,Endometrial Cancer,C54.1,Oncologic
+58,Liver Cancer,C22.9,Oncologic
+59,Systemic Lupus Erythematosus,M32.9,Autoimmune
+60,Chronic Pain Syndrome,G89.4,Musculoskeletal

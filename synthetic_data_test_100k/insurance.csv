@@ -1,0 +1,9 @@
+insurance_id,insurance_name,contact_info
+1,Blue Cross Blue Shield,"{""phone"": ""+1-210-343-3218x1960"", ""email"": ""customer.service@bluecrossblueshield.com"", ""website"": ""www.bluecrossblueshield.com""}"
+2,UnitedHealthcare,"{""phone"": ""538.990.8386"", ""email"": ""customer.service@unitedhealthcare.com"", ""website"": ""www.unitedhealthcare.com""}"
+3,Aetna,"{""phone"": ""001-740-326-5423"", ""email"": ""customer.service@aetna.com"", ""website"": ""www.aetna.com""}"
+4,Cigna,"{""phone"": ""361-855-9407"", ""email"": ""customer.service@cigna.com"", ""website"": ""www.cigna.com""}"
+5,Humana,"{""phone"": ""584-695-9310"", ""email"": ""customer.service@humana.com"", ""website"": ""www.humana.com""}"
+6,Kaiser Permanente,"{""phone"": ""731-564-7525"", ""email"": ""customer.service@kaiserpermanente.com"", ""website"": ""www.kaiserpermanente.com""}"
+7,Anthem,"{""phone"": ""+1-241-592-8327x64835"", ""email"": ""customer.service@anthem.com"", ""website"": ""www.anthem.com""}"
+8,Centene,"{""phone"": ""9568413953"", ""email"": ""customer.service@centene.com"", ""website"": ""www.centene.com""}"

@@ -1,0 +1,39 @@
+# Test configuration for 100K members (Tier 1 full integration test)
+n_members: 100000
+batch_size: 25000
+
+# Temporal parameters
+reference_date: '2024-01-01'
+claims_lookback_years: 1
+enrollment_lookback_years: 2
+
+# Randomization
+random_seed: 42
+
+# Data quality
+null_rates:
+  primary_care_physician: 0.30
+  heart_rate: 0.10
+  blood_pressure: 0.10
+  blood_oxygen: 0.15
+  housing_insecurity: 0.05
+  employment_status: 0.05
+
+# Output configuration
+output_dir: 'synthetic_data_test_100k'
+csv_encoding: 'utf-8'
+csv_date_format: '%Y-%m-%d'
+
+# Performance - no parallel for 100K
+enable_progress_bars: true
+show_time_estimates: true
+verbose_logging: false
+enable_parallel: false
+n_workers: null
+chunk_size: 25000
+
+# Paths to reference data
+reference_data_dir: 'config/reference_data'
+state_populations_file: 'state_populations.csv'
+conditions_file: 'conditions.csv'
+distributions_file: 'distributions.yaml'

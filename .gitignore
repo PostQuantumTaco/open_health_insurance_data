@@ -1,0 +1,117 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+venv/
+ENV/
+env/
+.venv/
+
+# PyCharm
+.idea/
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Environment variables and secrets
+.env
+.env.local
+.env.*.local
+*.key
+*.pem
+credentials.json
+service-account-*.json
+*-credentials.json
+
+# Node.js / Frontend
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Build outputs
+/build
+/dist
+/.next
+/out
+
+# Testing
+.coverage
+.pytest_cache/
+coverage/
+*.cover
+htmlcov/
+
+# Model files and data
+*.h5
+*.pkl
+*.onnx
+*.trt
+*.pb
+*.pth
+*.pt
+*.safetensors
+/data/raw/
+/data/processed/
+/models/checkpoints/
+/models/experiments/
+
+# Logs
+*.log
+logs/
+*.log.*
+CLAUDE.md
+.claude
+
+# OS
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.bak
+
+# GCP / Cloud
+.gcp/
+gcloud-config/
+
+# Docker
+.dockerignore
+
+# Deployment artifacts
+.backend_url

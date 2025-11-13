@@ -1,0 +1,987 @@
+# Statistical Distribution Parameters for Synthetic Data Generation
+# Source: data_generation_spec.md
+
+# ============================================================================
+# SECTION 2: DEMOGRAPHICS
+# ============================================================================
+
+# Age distribution (US Census 2023)
+age_groups:
+  '0-17':
+    proportion: 0.217
+    min_age: 0
+    max_age: 17
+  '18-24':
+    proportion: 0.089
+    min_age: 18
+    max_age: 24
+  '25-34':
+    proportion: 0.137
+    min_age: 25
+    max_age: 34
+  '35-44':
+    proportion: 0.126
+    min_age: 35
+    max_age: 44
+  '45-54':
+    proportion: 0.124
+    min_age: 45
+    max_age: 54
+  '55-64':
+    proportion: 0.128
+    min_age: 55
+    max_age: 64
+  '65-74':
+    proportion: 0.102
+    min_age: 65
+    max_age: 74
+  '75+':
+    proportion: 0.077
+    min_age: 75
+    max_age: 95
+
+# Sex distribution
+sex_distribution:
+  F: 0.505
+  M: 0.494
+  O: 0.001
+
+# ============================================================================
+# SECTION 3: BIOMETRICS
+# ============================================================================
+
+# Height and Weight (correlated, by sex)
+# Using multivariate normal distribution with correlation r=0.60 (M), r=0.58 (F)
+anthropometrics:
+  male:
+    height_mean_cm: 175.3       # ~5'9"
+    height_std_cm: 7.1
+    weight_mean_kg: 88.8        # ~196 lbs
+    weight_std_kg: 19.7
+    correlation: 0.60
+  female:
+    height_mean_cm: 161.3       # ~5'3.5"
+    height_std_cm: 6.9
+    weight_mean_kg: 76.9        # ~170 lbs
+    weight_std_kg: 20.8
+    correlation: 0.58
+  other:
+    height_mean_cm: 168.0       # Average of M/F
+    height_std_cm: 10.0
+    weight_mean_kg: 82.0
+    weight_std_kg: 22.0
+    correlation: 0.59
+
+# Vital Signs (simplified MVP distributions)
+vitals:
+  heart_rate:
+    base_mean: 72
+    base_std: 12
+    min: 40
+    max: 120
+    age_adjustment:              # bpm decrease per decade
+      '0-17': 10                 # Children have higher HR
+      '18-64': 0
+      '65+': -5                  # Elderly slightly lower
+
+  blood_pressure:
+    systolic_mean: 120
+    systolic_std: 15
+    diastolic_mean: 80
+    diastolic_std: 10
+    correlation: 0.70            # Systolic/diastolic correlation
+    min_systolic: 90
+    max_systolic: 180
+    min_diastolic: 60
+    max_diastolic: 120
+    age_adjustment_per_decade: 2  # mmHg increase per decade
+
+  blood_oxygen:
+    mean: 97
+    std: 2
+    min: 88
+    max: 100
+
+# ============================================================================
+# SECTION 4: LIFESTYLE & SOCIAL DETERMINANTS
+# ============================================================================
+
+lifestyle:
+  smoking:
+    overall_rate: 0.125          # 12.5% smokers
+    age_rates:
+      '0-17': 0.01
+      '18-24': 0.095
+      '25-34': 0.165
+      '35-44': 0.165
+      '45-54': 0.155
+      '55-64': 0.145
+      '65-74': 0.090
+      '75+': 0.050
+
+  alcohol:
+    heavy_drinker_rate: 0.16     # 16% heavy drinkers
+    age_rates:
+      '0-17': 0.00
+      '18-24': 0.18
+      '25-34': 0.20
+      '35-44': 0.19
+      '45-54': 0.17
+      '55-64': 0.14
+      '65-74': 0.10
+      '75+': 0.05
+
+  exercise:
+    distribution: 'lognormal'
+    median_minutes_per_week: 60
+    std_log: 1.0
+    min: 0
+    max: 1000
+
+  sleep:
+    distribution: 'normal'
+    mean_hours: 6.8
+    std_hours: 1.2
+    min: 3
+    max: 12
+
+lifestyle_correlation:
+  variable_order: [smoker, drinker, exercise, sleep, housing_insecurity, employment]
+  correlation_matrix:
+    - [1.00, 0.30, -0.15, -0.10, 0.08, -0.05]
+    - [0.30, 1.00, -0.10, -0.15, 0.05, -0.03]
+    - [-0.15, -0.10, 1.00, 0.25, -0.08, 0.12]
+    - [-0.10, -0.15, 0.25, 1.00, -0.15, 0.05]
+    - [0.08, 0.05, -0.08, -0.15, 1.00, -0.50]
+    - [-0.05, -0.03, 0.12, 0.05, -0.50, 1.00]
+  tolerance: 0.05              # acceptable absolute deviation for validation
+
+social_determinants:
+  housing_insecurity_rate: 0.065  # 6.5% overall
+  employment_rates:                # Age-stratified employment
+    '0-17': 0.00
+    '18-24': 0.55
+    '25-34': 0.80
+    '35-44': 0.85
+    '45-54': 0.88
+    '55-64': 0.70
+    '65-74': 0.25
+    '75+': 0.05
+
+# ============================================================================
+# SECTION 5: HEALTH CONDITIONS
+# ============================================================================
+
+# Simplified MVP: Age-stratified prevalence only (no comorbidity modeling yet)
+# Prevalence values are per condition per age group
+
+condition_prevalence:
+  # Average number of conditions per age group
+  mean_conditions_by_age:
+    '0-17': 0.3
+    '18-24': 0.4
+    '25-34': 0.6
+    '35-44': 1.0
+    '45-54': 1.8
+    '55-64': 2.5
+    '65-74': 3.5
+    '75+': 4.5
+
+  # Full Tier 2 catalog: 60 conditions with age-stratified prevalence
+  conditions:
+    Alzheimer_Disease:
+      '0-17': 0.0
+      '18-34': 0.0
+      '35-44': 0.0
+      '45-54': 0.01
+      '55-64': 0.05
+      '65+': 0.12
+
+    Anemia:
+      '0-17': 0.01
+      '18-34': 0.015
+      '35-44': 0.02
+      '45-54': 0.025
+      '55-64': 0.03
+      '65+': 0.04
+
+    Anxiety:
+      '0-17': 0.03
+      '18-34': 0.15
+      '35-44': 0.12
+      '45-54': 0.1
+      '55-64': 0.08
+      '65+': 0.06
+
+    Asthma:
+      '0-17': 0.08
+      '18-34': 0.08
+      '35-44': 0.08
+      '45-54': 0.08
+      '55-64': 0.07
+      '65+': 0.06
+
+    Atrial_Fibrillation:
+      '0-17': 0.0
+      '18-34': 0.001
+      '35-44': 0.005
+      '45-54': 0.02
+      '55-64': 0.05
+      '65+': 0.12
+
+    Back_Pain:
+      '0-17': 0.05
+      '18-34': 0.08
+      '35-44': 0.12
+      '45-54': 0.18
+      '55-64': 0.2
+      '65+': 0.18
+
+    Benign_Prostatic_Hyperplasia:
+      '0-17': 0.0
+      '18-34': 0.0
+      '35-44': 0.02
+      '45-54': 0.08
+      '55-64': 0.2
+      '65+': 0.3
+
+    Bipolar_Disorder:
+      '0-17': 0.001
+      '18-34': 0.02
+      '35-44': 0.02
+      '45-54': 0.015
+      '55-64': 0.01
+      '65+': 0.008
+
+    Breast_Cancer:
+      '0-17': 0.0
+      '18-34': 0.0005
+      '35-44': 0.003
+      '45-54': 0.01
+      '55-64': 0.02
+      '65+': 0.05
+
+    COPD:
+      '0-17': 0.0
+      '18-34': 0.005
+      '35-44': 0.02
+      '45-54': 0.06
+      '55-64': 0.1
+      '65+': 0.17
+
+    Cellulitis:
+      '0-17': 0.01
+      '18-34': 0.01
+      '35-44': 0.01
+      '45-54': 0.012
+      '55-64': 0.015
+      '65+': 0.02
+
+    Chronic_Kidney_Disease:
+      '0-17': 0.001
+      '18-34': 0.01
+      '35-44': 0.02
+      '45-54': 0.05
+      '55-64': 0.08
+      '65+': 0.15
+
+    Chronic_Pain_Syndrome:
+      '0-17': 0.01
+      '18-34': 0.03
+      '35-44': 0.05
+      '45-54': 0.08
+      '55-64': 0.1
+      '65+': 0.12
+
+    Cirrhosis:
+      '0-17': 0.0
+      '18-34': 0.001
+      '35-44': 0.003
+      '45-54': 0.008
+      '55-64': 0.015
+      '65+': 0.03
+
+    Colon_Cancer:
+      '0-17': 0.0
+      '18-34': 0.0005
+      '35-44': 0.002
+      '45-54': 0.01
+      '55-64': 0.03
+      '65+': 0.06
+
+    Coronary_Artery_Disease:
+      '0-17': 0.0
+      '18-34': 0.001
+      '35-44': 0.01
+      '45-54': 0.05
+      '55-64': 0.12
+      '65+': 0.22
+
+    Depression:
+      '0-17': 0.02
+      '18-34': 0.12
+      '35-44': 0.1
+      '45-54': 0.08
+      '55-64': 0.07
+      '65+': 0.06
+
+    Diabetes_Type_1:
+      '0-17': 0.008
+      '18-34': 0.006
+      '35-44': 0.004
+      '45-54': 0.003
+      '55-64': 0.002
+      '65+': 0.001
+
+    Diabetes_Type_2:
+      '0-17': 0.005
+      '18-34': 0.03
+      '35-44': 0.08
+      '45-54': 0.15
+      '55-64': 0.22
+      '65+': 0.27
+
+    End_Stage_Renal_Disease:
+      '0-17': 0.0
+      '18-34': 0.0005
+      '35-44': 0.001
+      '45-54': 0.004
+      '55-64': 0.01
+      '65+': 0.03
+
+    Endometrial_Cancer:
+      '0-17': 0.0
+      '18-34': 0.0005
+      '35-44': 0.0015
+      '45-54': 0.004
+      '55-64': 0.01
+      '65+': 0.02
+
+    Epilepsy:
+      '0-17': 0.008
+      '18-34': 0.006
+      '35-44': 0.004
+      '45-54': 0.003
+      '55-64': 0.003
+      '65+': 0.003
+
+    Gastroenteritis:
+      '0-17': 0.12
+      '18-34': 0.1
+      '35-44': 0.08
+      '45-54': 0.06
+      '55-64': 0.05
+      '65+': 0.04
+
+    Gastroesophageal_Reflux:
+      '0-17': 0.02
+      '18-34': 0.1
+      '35-44': 0.15
+      '45-54': 0.2
+      '55-64': 0.25
+      '65+': 0.3
+
+    HIV:
+      '0-17': 0.0
+      '18-34': 0.006
+      '35-44': 0.01
+      '45-54': 0.008
+      '55-64': 0.006
+      '65+': 0.004
+
+    Heart_Failure:
+      '0-17': 0.0
+      '18-34': 0.001
+      '35-44': 0.005
+      '45-54': 0.02
+      '55-64': 0.05
+      '65+': 0.12
+
+    Hepatitis_C:
+      '0-17': 0.0
+      '18-34': 0.003
+      '35-44': 0.006
+      '45-54': 0.012
+      '55-64': 0.015
+      '65+': 0.015
+
+    Hyperlipidemia:
+      '0-17': 0.001
+      '18-34': 0.08
+      '35-44': 0.2
+      '45-54': 0.35
+      '55-64': 0.5
+      '65+': 0.6
+
+    Hypertension:
+      '0-17': 0.005
+      '18-34': 0.05
+      '35-44': 0.15
+      '45-54': 0.3
+      '55-64': 0.5
+      '65+': 0.7
+
+    Hyperthyroidism:
+      '0-17': 0.001
+      '18-34': 0.01
+      '35-44': 0.02
+      '45-54': 0.03
+      '55-64': 0.03
+      '65+': 0.04
+
+    Hypothyroidism:
+      '0-17': 0.002
+      '18-34': 0.02
+      '35-44': 0.04
+      '45-54': 0.06
+      '55-64': 0.08
+      '65+': 0.1
+
+    Inflammatory_Bowel_Disease:
+      '0-17': 0.001
+      '18-34': 0.01
+      '35-44': 0.02
+      '45-54': 0.02
+      '55-64': 0.02
+      '65+': 0.015
+
+    Irritable_Bowel_Syndrome:
+      '0-17': 0.02
+      '18-34': 0.12
+      '35-44': 0.1
+      '45-54': 0.09
+      '55-64': 0.08
+      '65+': 0.06
+
+    Leukemia:
+      '0-17': 0.001
+      '18-34': 0.001
+      '35-44': 0.001
+      '45-54': 0.002
+      '55-64': 0.004
+      '65+': 0.01
+
+    Liver_Cancer:
+      '0-17': 0.0
+      '18-34': 0.0003
+      '35-44': 0.0008
+      '45-54': 0.002
+      '55-64': 0.006
+      '65+': 0.015
+
+    Lung_Cancer:
+      '0-17': 0.0
+      '18-34': 0.0005
+      '35-44': 0.002
+      '45-54': 0.01
+      '55-64': 0.03
+      '65+': 0.06
+
+    Lymphoma:
+      '0-17': 0.001
+      '18-34': 0.002
+      '35-44': 0.003
+      '45-54': 0.005
+      '55-64': 0.008
+      '65+': 0.015
+
+    Migraine:
+      '0-17': 0.01
+      '18-34': 0.18
+      '35-44': 0.17
+      '45-54': 0.15
+      '55-64': 0.1
+      '65+': 0.05
+
+    Multiple_Sclerosis:
+      '0-17': 0.0
+      '18-34': 0.002
+      '35-44': 0.004
+      '45-54': 0.003
+      '55-64': 0.002
+      '65+': 0.001
+
+    Obesity:
+      '0-17': 0.2
+      '18-34': 0.35
+      '35-44': 0.4
+      '45-54': 0.45
+      '55-64': 0.45
+      '65+': 0.38
+
+    Osteoarthritis:
+      '0-17': 0.0
+      '18-34': 0.01
+      '35-44': 0.05
+      '45-54': 0.15
+      '55-64': 0.3
+      '65+': 0.5
+
+    Osteoporosis:
+      '0-17': 0.0
+      '18-34': 0.002
+      '35-44': 0.01
+      '45-54': 0.03
+      '55-64': 0.08
+      '65+': 0.2
+
+    Ovarian_Cancer:
+      '0-17': 0.0
+      '18-34': 0.0005
+      '35-44': 0.001
+      '45-54': 0.004
+      '55-64': 0.01
+      '65+': 0.02
+
+    PTSD:
+      '0-17': 0.005
+      '18-34': 0.04
+      '35-44': 0.04
+      '45-54': 0.03
+      '55-64': 0.02
+      '65+': 0.015
+
+    Pancreatic_Cancer:
+      '0-17': 0.0
+      '18-34': 0.0002
+      '35-44': 0.0005
+      '45-54': 0.002
+      '55-64': 0.006
+      '65+': 0.015
+
+    Parkinson_Disease:
+      '0-17': 0.0
+      '18-34': 0.0
+      '35-44': 0.001
+      '45-54': 0.005
+      '55-64': 0.02
+      '65+': 0.05
+
+    Peripheral_Artery_Disease:
+      '0-17': 0.0
+      '18-34': 0.002
+      '35-44': 0.008
+      '45-54': 0.02
+      '55-64': 0.05
+      '65+': 0.1
+
+    Pneumonia:
+      '0-17': 0.02
+      '18-34': 0.02
+      '35-44': 0.02
+      '45-54': 0.03
+      '55-64': 0.04
+      '65+': 0.05
+
+    Prostate_Cancer:
+      '0-17': 0.0
+      '18-34': 0.0
+      '35-44': 0.001
+      '45-54': 0.01
+      '55-64': 0.04
+      '65+': 0.08
+
+    Psoriasis:
+      '0-17': 0.0
+      '18-34': 0.03
+      '35-44': 0.03
+      '45-54': 0.03
+      '55-64': 0.03
+      '65+': 0.025
+
+    Rheumatoid_Arthritis:
+      '0-17': 0.0
+      '18-34': 0.005
+      '35-44': 0.01
+      '45-54': 0.015
+      '55-64': 0.02
+      '65+': 0.02
+
+    Schizophrenia:
+      '0-17': 0.001
+      '18-34': 0.01
+      '35-44': 0.009
+      '45-54': 0.008
+      '55-64': 0.007
+      '65+': 0.007
+
+    Sepsis:
+      '0-17': 0.0
+      '18-34': 0.0005
+      '35-44': 0.001
+      '45-54': 0.002
+      '55-64': 0.004
+      '65+': 0.01
+
+    Skin_Cancer:
+      '0-17': 0.0
+      '18-34': 0.005
+      '35-44': 0.01
+      '45-54': 0.02
+      '55-64': 0.04
+      '65+': 0.07
+
+    Sleep_Apnea:
+      '0-17': 0.01
+      '18-34': 0.05
+      '35-44': 0.1
+      '45-54': 0.15
+      '55-64': 0.18
+      '65+': 0.2
+
+    Stroke:
+      '0-17': 0.0002
+      '18-34': 0.001
+      '35-44': 0.003
+      '45-54': 0.01
+      '55-64': 0.03
+      '65+': 0.08
+
+    Systemic_Lupus_Erythematosus:
+      '0-17': 0.0
+      '18-34': 0.005
+      '35-44': 0.008
+      '45-54': 0.007
+      '55-64': 0.006
+      '65+': 0.005
+
+    Tuberculosis:
+      '0-17': 0.001
+      '18-34': 0.002
+      '35-44': 0.002
+      '45-54': 0.002
+      '55-64': 0.002
+      '65+': 0.002
+
+    Upper_Respiratory_Infection:
+      '0-17': 0.2
+      '18-34': 0.18
+      '35-44': 0.15
+      '45-54': 0.12
+      '55-64': 0.1
+      '65+': 0.08
+
+    Urinary_Tract_Infection:
+      '0-17': 0.1
+      '18-34': 0.12
+      '35-44': 0.1
+      '45-54': 0.08
+      '55-64': 0.06
+      '65+': 0.05
+
+# ============================================================================
+# TIER 1 FEATURES: CLINICAL REALISM ENHANCEMENTS
+# ============================================================================
+
+# TIER 1 FEATURE 2: Risk Factor Multipliers
+# Apply to base prevalence rates based on risk factors (BMI, smoking, etc.)
+risk_multipliers:
+  obesity:  # BMI >= 30
+    Diabetes_Type_2: 7.0
+    Hypertension: 3.0
+    Sleep_Apnea: 5.0
+    Osteoarthritis: 2.0
+    Gastroesophageal_Reflux: 2.0
+    Coronary_Artery_Disease: 2.0
+    Chronic_Kidney_Disease: 1.8
+    Migraine: 1.4
+
+  smoking:
+    COPD: 10.0
+    Coronary_Artery_Disease: 3.0
+    Hypertension: 1.5
+    Asthma: 1.3  # Exacerbation
+    Lung_Cancer: 6.0
+    Peripheral_Artery_Disease: 1.6
+    Stroke: 1.4
+
+  heavy_drinking:
+    Hypertension: 2.0
+    Cirrhosis: 5.0
+    Depression: 1.5
+    Pancreatic_Cancer: 1.5
+
+  housing_insecurity:
+    Depression: 1.5
+    Anxiety: 1.5
+    COPD: 1.3
+    Diabetes_Type_2: 1.2  # Poor disease management
+    Chronic_Kidney_Disease: 1.2
+
+# TIER 1 FEATURE 1: Comorbidity Rules
+# Add related conditions after initial assignment
+comorbidity_rules:
+  - name: "Diabetes → Hypertension"
+    trigger: Diabetes_Type_2
+    adds: Hypertension
+    probability: 0.70
+    target_rate: 0.70
+    delay_days_min: 180
+    delay_days_max: 730
+
+  - name: "Diabetes → Hyperlipidemia"
+    trigger: Diabetes_Type_2
+    adds: Hyperlipidemia
+    probability: 0.60
+    delay_days_min: 180
+    delay_days_max: 730
+
+  - name: "Hypertension + Hyperlipidemia → CAD"
+    trigger: [Hypertension, Hyperlipidemia]  # Both required
+    adds: Coronary_Artery_Disease
+    probability: 0.25
+    age_min: 55
+    delay_days_min: 730
+    delay_days_max: 3650
+
+  - name: "CAD → Heart Failure"
+    trigger: Coronary_Artery_Disease
+    adds: Heart_Failure
+    probability: 0.30
+    delay_days_min: 365
+    delay_days_max: 2555
+
+  - name: "Depression → Anxiety"
+    trigger: Depression
+    adds: Anxiety
+    probability: 0.60
+    delay_days_min: 30
+    delay_days_max: 730
+
+  - name: "COPD → CAD"
+    trigger: COPD
+    adds: Coronary_Artery_Disease
+    probability: 0.40
+    age_min: 55
+    delay_days_min: 1825
+    delay_days_max: 5475
+
+  - name: "Obesity + Age 50+ → Sleep Apnea"
+    trigger: Obesity
+    adds: Sleep_Apnea
+    probability: 0.60
+    age_min: 50
+    delay_days_min: 0
+    delay_days_max: 1825
+
+  - name: "Diabetes → Chronic Kidney Disease"
+    trigger: Diabetes_Type_2
+    adds: Chronic_Kidney_Disease
+    probability: 0.25
+    age_min: 40
+    delay_days_min: 365
+    delay_days_max: 3650
+
+  - name: "Chronic Kidney Disease → ESRD"
+    trigger: Chronic_Kidney_Disease
+    adds: End_Stage_Renal_Disease
+    probability: 0.30
+    age_min: 50
+    delay_days_min: 730
+    delay_days_max: 3650
+
+  - name: "COPD → Lung Cancer"
+    trigger: COPD
+    adds: Lung_Cancer
+    probability: 0.10
+    age_min: 50
+    delay_days_min: 1825
+    delay_days_max: 5475
+
+  - name: "Inflammatory Bowel Disease → Colon Cancer"
+    trigger: Inflammatory_Bowel_Disease
+    adds: Colon_Cancer
+    probability: 0.06
+    delay_days_min: 1825
+    delay_days_max: 5475
+
+  - name: "PTSD → Depression"
+    trigger: PTSD
+    adds: Depression
+    probability: 0.40
+    delay_days_min: 30
+    delay_days_max: 365
+
+  - name: "Chronic Pain → Depression"
+    trigger: Chronic_Pain_Syndrome
+    adds: Depression
+    probability: 0.45
+    delay_days_min: 30
+    delay_days_max: 365
+
+# TIER 1 FEATURE 3: Condition-Adjusted Vitals
+# Modify vital signs based on conditions (applied after condition assignment)
+condition_vital_adjustments:
+  blood_pressure:
+    Hypertension:
+      systolic_mean_increase: 20
+      systolic_std: 10
+      diastolic_mean_increase: 10
+      diastolic_std: 5
+
+    Diabetes_Type_2:
+      systolic_mean_increase: 8
+      systolic_std: 5
+
+    Chronic_Kidney_Disease:
+      systolic_mean_increase: 12
+      systolic_std: 6
+
+  heart_rate:
+    Anxiety:
+      mean_increase: 8
+      std: 4
+
+    Heart_Failure:
+      mean_increase: 10
+      std: 5
+
+    COPD:
+      mean_increase: 8
+      std: 4
+
+    Hyperthyroidism:
+      mean_increase: 15
+      std: 6
+
+  blood_oxygen:
+    COPD:
+      mean_decrease: 5
+      std: 2
+
+    Asthma:
+      mean_decrease: 2
+      std: 1.5
+
+    Sleep_Apnea:
+      mean_decrease: 3
+      std: 2
+
+    Heart_Failure:
+      mean_decrease: 3
+      std: 1.5
+
+# ============================================================================
+# SECTION 6: INSURANCE & ENROLLMENT
+# ============================================================================
+
+insurance:
+  coverage_rate: 0.90            # 90% of members have insurance
+
+  # Plan type preferences by age
+  plan_preferences:
+    '0-17': [0.05, 0.15, 0.35, 0.35, 0.10]    # [Catastrophic, Bronze, Silver, Gold, Platinum]
+    '18-34': [0.15, 0.30, 0.30, 0.20, 0.05]
+    '35-44': [0.10, 0.25, 0.35, 0.25, 0.05]
+    '45-54': [0.05, 0.20, 0.35, 0.30, 0.10]
+    '55-64': [0.03, 0.15, 0.30, 0.35, 0.17]
+    '65+': [0.00, 0.10, 0.30, 0.40, 0.20]      # Medicare Advantage
+
+  # ACA premium calculation
+  aca_age_rating:
+    max_ratio: 3.0               # 3:1 age rating
+    reference_age: 21
+
+  # Enrollment status
+  active_enrollment_rate: 0.70   # 70% currently active, 30% ended
+
+# ============================================================================
+# SECTION 7: CLAIMS GENERATION
+# ============================================================================
+
+claims:
+  # Poisson frequency (mean claims per year by age)
+  frequency_by_age:
+    '0-17': 3.5
+    '18-34': 2.5
+    '35-44': 3.5
+    '45-54': 4.5
+    '55-64': 6.0
+    '65-74': 8.0
+    '75+': 9.5
+
+  # Log-normal claim amounts by type (mean and std in log space)
+  amounts:
+    office_visit:
+      mean_log: 5.52             # ~$250
+      std_log: 0.40
+      max_amount: 1000
+    specialist:
+      mean_log: 6.21             # ~$500
+      std_log: 0.50
+      max_amount: 2500
+    emergency:
+      mean_log: 8.52             # ~$5,000
+      std_log: 0.80
+      max_amount: 50000
+    inpatient:
+      mean_log: 10.13            # ~$25,000
+      std_log: 1.00
+      max_amount: 250000
+    outpatient_surgery:
+      mean_log: 9.21             # ~$10,000
+      std_log: 0.70
+      max_amount: 150000
+
+  # Claim type distribution
+  claim_type_distribution:
+    office_visit: 0.60
+    specialist: 0.20
+    emergency: 0.05
+    inpatient: 0.05
+    outpatient_surgery: 0.10
+
+  # TIER 1 FEATURE 4: Condition multipliers for claim frequency
+  condition_multipliers:
+    Diabetes_Type_2: 2.5
+    Hypertension: 1.0
+    Heart_Failure: 4.0
+    COPD: 3.5
+    Chronic_Kidney_Disease: 3.0
+    Breast_Cancer: 8.0
+    Lung_Cancer: 8.0
+    Colon_Cancer: 7.0
+    Prostate_Cancer: 6.0
+    Pancreatic_Cancer: 9.0
+    Leukemia: 8.0
+    Lymphoma: 7.5
+    Ovarian_Cancer: 8.0
+    Endometrial_Cancer: 6.5
+    Skin_Cancer: 4.0
+    Depression: 1.5
+    Anxiety: 1.5
+    HIV: 3.0
+    Chronic_Pain_Syndrome: 1.2
+    per_additional_condition: 0.5
+
+  # TIER 1 FEATURE 4: Condition-specific amount adjustments
+  condition_amount_adjustments:
+    Diabetes_Type_2:
+      management_claim_probability: 0.30  # 30% of diabetic claims are routine DM management
+      management_mean_amount: 500
+      management_std_log: 0.3
+
+    Heart_Failure:
+      inpatient_multiplier: 1.3
+      office_visit_multiplier: 1.2
+      emergency_multiplier: 1.2
+
+    COPD:
+      emergency_multiplier: 1.2
+      inpatient_multiplier: 1.4
+      office_visit_multiplier: 1.1
+
+    Depression:
+      therapy_visit_mean: 200
+      therapy_visit_std_log: 0.25
+      therapy_visit_probability: 0.50  # 50% of depression claims are therapy
+
+    Anxiety:
+      therapy_visit_mean: 200
+      therapy_visit_std_log: 0.25
+      therapy_visit_probability: 0.50
+
+    # Age-based multipliers
+    age_adjustments:
+      pediatric_multiplier: 0.7   # age < 18
+      elderly_multiplier: 1.4     # age >= 65

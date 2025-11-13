@@ -1,0 +1,39 @@
+# Test configuration for 10K members (Tier 1 features validation)
+n_members: 10000
+batch_size: 5000
+
+# Temporal parameters
+reference_date: '2024-01-01'
+claims_lookback_years: 1
+enrollment_lookback_years: 2
+
+# Randomization
+random_seed: 42
+
+# Data quality - use defaults from main config
+null_rates:
+  primary_care_physician: 0.30
+  heart_rate: 0.10
+  blood_pressure: 0.10
+  blood_oxygen: 0.15
+  housing_insecurity: 0.05
+  employment_status: 0.05
+
+# Output configuration
+output_dir: 'synthetic_data_test_10k'
+csv_encoding: 'utf-8'
+csv_date_format: '%Y-%m-%d'
+
+# Performance - no parallel for small test
+enable_progress_bars: true
+show_time_estimates: true
+verbose_logging: true
+enable_parallel: false
+n_workers: null
+chunk_size: 5000
+
+# Paths to reference data
+reference_data_dir: 'config/reference_data'
+state_populations_file: 'state_populations.csv'
+conditions_file: 'conditions.csv'
+distributions_file: 'distributions.yaml'
